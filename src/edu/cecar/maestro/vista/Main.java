@@ -5,6 +5,13 @@
  */
 package edu.cecar.maestro.vista;
 
+import edu.cecar.maestro.logica.Logica;
+import java.rmi.Naming;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
 /**
  *
  * @author 1102883765
@@ -14,6 +21,9 @@ public class Main extends javax.swing.JFrame {
     /**
      * Creates new form Main
      */
+     FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV", "csv");
+    
+    
     public Main() {
         initComponents();
     }
@@ -37,8 +47,18 @@ public class Main extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jBBuscar.setText("Buscar Archivo");
+        jBBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buscarArchivo(evt);
+            }
+        });
 
         jBInicar.setText("Iniciar");
+        jBInicar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBInicarActionPerformed(evt);
+            }
+        });
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -88,6 +108,19 @@ public class Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jBInicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBInicarActionPerformed
+        
+        
+        
+    }//GEN-LAST:event_jBInicarActionPerformed
+
+    private void buscarArchivo(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarArchivo
+       JFileChooser chooser = new JFileChooser();
+        chooser.setFileFilter(filter);
+        chooser.showOpenDialog(this);
+        System.out.println("as");
+    }//GEN-LAST:event_buscarArchivo
+
     /**
      * @param args the command line arguments
      */
@@ -121,6 +154,19 @@ public class Main extends javax.swing.JFrame {
                 new Main().setVisible(true);
             }
         });
+        
+        try {
+            
+             Registry registry = LocateRegistry.createRegistry(1099);
+             Logica logica = new Logica();
+           registry.bind("MyServer", logica);
+           
+            System.err.println("Server listo");
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
