@@ -14,6 +14,8 @@ import java.rmi.RemoteException;
  */
 public interface IServidorEsclavo extends Remote{
     
-   public void ordenar() throws RemoteException;
+   public void ordenar(String datos) throws RemoteException;
     
+ 
+           
 }
