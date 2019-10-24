@@ -6,7 +6,12 @@
 package edu.cecar.esclavo.logica;
 
 import edu.cecar.interfaces.IServidorEsclavo;
+import edu.cecar.interfaces.IServidorMaestro;
+import java.net.MalformedURLException;
+import java.rmi.Naming;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
 /**
  *
@@ -23,4 +28,25 @@ public class IMPEsclavo  implements IServidorEsclavo {
             System.out.println(i);
         }
     }
+
+    public IMPEsclavo() {
+    try{
+        String url = "rmi://127.0.0.1/MyServer";
+        IServidorMaestro maestro = (IServidorMaestro) Naming.lookup(url);
+        maestro.recibirObjeto((IServidorEsclavo)UnicastRemoteObject.exportObject(this, 0));
+        
+    }catch(Exception e){
+        e.printStackTrace();
+    }
+    
+    }
+    
+      public static void main(String[] args) throws NotBoundException, MalformedURLException, RemoteException {
+        
+       new IMPEsclavo();
+        
+     
+    }
+    
+    
 }

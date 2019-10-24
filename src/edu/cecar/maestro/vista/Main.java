@@ -7,8 +7,11 @@ package edu.cecar.maestro.vista;
 
 import edu.cecar.maestro.logica.Logica;
 import java.rmi.Naming;
+import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -22,7 +25,7 @@ public class Main extends javax.swing.JFrame {
      * Creates new form Main
      */
      FileNameExtensionFilter filter = new FileNameExtensionFilter("CSV", "csv");
-    
+     static Logica logica ;
     
     public Main() {
         initComponents();
@@ -56,7 +59,7 @@ public class Main extends javax.swing.JFrame {
         jBInicar.setText("Iniciar");
         jBInicar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBInicarActionPerformed(evt);
+                inicar(evt);
             }
         });
 
@@ -108,17 +111,21 @@ public class Main extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jBInicarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBInicarActionPerformed
+    private void inicar(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_inicar
         
+         try {
+             logica.iniciar();
+         } catch (RemoteException ex) {
+             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+         }
         
-        
-    }//GEN-LAST:event_jBInicarActionPerformed
+    }//GEN-LAST:event_inicar
 
     private void buscarArchivo(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarArchivo
        JFileChooser chooser = new JFileChooser();
         chooser.setFileFilter(filter);
         chooser.showOpenDialog(this);
-        System.out.println("as");
+       
     }//GEN-LAST:event_buscarArchivo
 
     /**
@@ -156,9 +163,9 @@ public class Main extends javax.swing.JFrame {
         });
         
         try {
-            
+            logica = new Logica();
              Registry registry = LocateRegistry.createRegistry(1099);
-             Logica logica = new Logica();
+              logica = new Logica();
            registry.bind("MyServer", logica);
            
             System.err.println("Server listo");
