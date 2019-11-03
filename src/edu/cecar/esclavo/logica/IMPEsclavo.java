@@ -7,16 +7,11 @@ package edu.cecar.esclavo.logica;
 
 import edu.cecar.interfaces.IServidorEsclavo;
 import edu.cecar.interfaces.IServidorMaestro;
-import java.net.InetAddress;
 import java.net.MalformedURLException;
-import java.net.UnknownHostException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import netscape.javascript.JSObject;
 import org.json.JSONObject;
 
 /**
@@ -24,7 +19,7 @@ import org.json.JSONObject;
  * @author 1102883765
  */
 public class IMPEsclavo  implements IServidorEsclavo {
-    
+     JSONObject respuesta = new JSONObject();
     
      @Override
     public void ordenar(String datos) throws RemoteException {
@@ -54,23 +49,22 @@ public class IMPEsclavo  implements IServidorEsclavo {
      
     }
 
-    @Override
-    public String getIP() throws RemoteException {
-       String ip="no hay";
-         try {
-            ip=  InetAddress.getLocalHost().getHostAddress();
-         } catch (UnknownHostException ex) {
-             Logger.getLogger(IMPEsclavo.class.getName()).log(Level.SEVERE, null, ex);
-         }
-         return ip;
-    }
 
     @Override
-    public void clasificar(JSONObject jSObject) throws RemoteException {
+    public void clasificar(String datos) throws RemoteException {
        
         
         
         
+    }
+
+    @Override
+    public String getInformacion() throws RemoteException {
+      
+       
+       respuesta.put("cores",Runtime.getRuntime().availableProcessors() );
+              
+       return  respuesta.toString();
     }
 
 

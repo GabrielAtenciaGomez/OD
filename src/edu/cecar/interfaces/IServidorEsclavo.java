@@ -17,8 +17,8 @@ import org.json.JSONObject;
 public interface IServidorEsclavo extends Remote{
     
    public void ordenar(String datos) throws RemoteException;
-   public JSONObject getInformacion() throws RemoteException;
-   public void clasificar(JSONObject jSObject ) throws RemoteException;
+   public String getInformacion() throws RemoteException;
+   public void clasificar(String datos ) throws RemoteException;
 
  
            
