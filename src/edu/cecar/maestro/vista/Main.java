@@ -6,6 +6,7 @@
 package edu.cecar.maestro.vista;
 
 import edu.cecar.maestro.logica.Logica;
+import java.io.IOException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -124,7 +125,15 @@ public class Main extends javax.swing.JFrame {
     private void buscarArchivo(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarArchivo
        JFileChooser chooser = new JFileChooser();
         chooser.setFileFilter(filter);
-        chooser.showOpenDialog(this);
+        int a =chooser.showOpenDialog(this);
+       
+        if (a== JFileChooser.APPROVE_OPTION) {
+
+               logica.cargarArchivo( chooser.getSelectedFile());
+          
+        }
+        
+       
        
     }//GEN-LAST:event_buscarArchivo
 
@@ -156,6 +165,9 @@ public class Main extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
+        
+        System.out.println(Integer.toBinaryString(04));
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Main().setVisible(true);

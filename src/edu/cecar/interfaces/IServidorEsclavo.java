@@ -5,8 +5,10 @@
  */
 package edu.cecar.interfaces;
 
+
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import org.json.JSONObject;
 
 /**
  *
@@ -15,7 +17,9 @@ import java.rmi.RemoteException;
 public interface IServidorEsclavo extends Remote{
     
    public void ordenar(String datos) throws RemoteException;
-    
+   public JSONObject getInformacion() throws RemoteException;
+   public void clasificar(JSONObject jSObject ) throws RemoteException;
+
  
            
 }
