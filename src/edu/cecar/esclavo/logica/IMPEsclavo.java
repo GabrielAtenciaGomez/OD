@@ -51,11 +51,11 @@ public class IMPEsclavo  implements IServidorEsclavo {
 
 
     @Override
-    public void clasificar(String datos) throws RemoteException {
-       
+    public String clasificar(String datos) throws RemoteException {
+       JSONObject numeros = new JSONObject(datos);
         
         
-        
+        return "";
     }
 
     @Override

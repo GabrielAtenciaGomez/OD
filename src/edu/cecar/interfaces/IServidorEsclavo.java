@@ -18,7 +18,7 @@ public interface IServidorEsclavo extends Remote{
     
    public void ordenar(String datos) throws RemoteException;
    public String getInformacion() throws RemoteException;
-   public void clasificar(String datos ) throws RemoteException;
+   public String clasificar(String datos ) throws RemoteException;
 
  
            

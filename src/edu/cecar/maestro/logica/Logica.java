@@ -17,6 +17,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -30,7 +31,7 @@ public class Logica extends UnicastRemoteObject implements IServidorMaestro {
     int cantidadCores = 0;
     String[] numeros;
     float paqueteNumero = 0.0f;
-    float cantidadNumero=0.0f;
+    float cantidadNumero = 0.0f;
 
     public Logica() throws RemoteException {
 
@@ -69,45 +70,48 @@ public class Logica extends UnicastRemoteObject implements IServidorMaestro {
         for (JSONObject dato : datos) {
             cantidadCores += dato.getInt("cores");
         }
-        cantidadNumero= numeros.length;
-        paqueteNumero = cantidadNumero /(float) cantidadCores;
+        cantidadNumero = numeros.length;
+        paqueteNumero = cantidadNumero / (float) cantidadCores;
 
-      
-
-        clasificar();
+        repartirNumeros();
+        
+        
         for (IServidorEsclavo esclavo : esclavos) {
 
             esclavo.ordenar("5");
         }
     }
 
-    public void clasificar() {
+    public JSONObject repartirNumeros() {
         int i = 0;
+        JSONArray array;
+        JSONObject respuesta = new JSONObject();
         int incrementoAnt = 0;
         int incrementoNuevo = 0;
         System.out.println("Numero: " + numeros.length);
-        System.out.println("Cantidad paquete numero: "+paqueteNumero);
-        
-        
+        System.out.println("Cantidad paquete numero: " + paqueteNumero);
+
         //recorrer todos los esclavos para repartir los numeros
         for (int k = 0; k < esclavos.size(); k++) {
-            
+
             //funcion matematica que permite calcular el numero de 
-            System.out.println("incremeto sin redondear: "+ (paqueteNumero * (k + 1) * datos.get(k).getInt("cores")));
-            incrementoNuevo = (int)(paqueteNumero * (k + 1) * datos.get(k).getInt("cores"));
+            System.out.println("incremeto sin redondear: " + (paqueteNumero * (k + 1) * datos.get(k).getInt("cores")));
+            incrementoNuevo = (int) (paqueteNumero * (k + 1) * datos.get(k).getInt("cores"));
             System.out.println("incremento: " + incrementoNuevo);
 
+            array = new JSONArray();
             for (i = incrementoAnt; i < incrementoNuevo; i++) {
                 System.out.println("incremento: " + incrementoNuevo + " i: " + i + " esclavo: " + k + " numero: " + numeros[i]);
+
+                array.put(numeros[i]);
+
             }
             incrementoAnt = incrementoNuevo;
 
-        }
-        
-        if(cantidadNumero-incrementoNuevo<0){
-            System.out.println("no fue completo");
+            respuesta.put(""+(k + 1), array);
         }
 
+        return respuesta;
     }
 
 }
