@@ -6,6 +6,9 @@
 package edu.cecar.maestro.logica;
 
 import edu.cecar.interfaces.IServidorEsclavo;
+import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.JSONArray;
 
 /**
@@ -30,8 +33,10 @@ public class EsclavoHilo extends Thread{
     @Override
     public void run() {
        
-        for (int i = 0; i < 1000; i++) {
-            System.out.println(""+array.get(0)+": "+i);
+        try {
+            esclavo.clasificar(array.toString());
+        } catch (RemoteException ex) {
+            Logger.getLogger(EsclavoHilo.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         

@@ -76,21 +76,21 @@ public class Logica extends UnicastRemoteObject implements IServidorMaestro {
 
       JSONObject numerosRespartidos=  repartirNumeros();
         
-      
+       int i=1;
         for (IServidorEsclavo esclavo : esclavos) {
-            int i=1;         
+                  
             
             EsclavoHilo esclavoHilo = new EsclavoHilo(esclavo);
             esclavoHilo.setArray(numerosRespartidos.getJSONArray(""+i));
             esclavoHilos.add(esclavoHilo);
-            
+            esclavoHilos.get(i-1).start();
             i++;
             
         }
            
-        for (EsclavoHilo esclavoHilo : esclavoHilos) {
-            esclavoHilo.start();
-        }
+      //  for (EsclavoHilo esclavoHilo : esclavoHilos) {
+          //  esclavoHilo.start();
+       // }
         for (EsclavoHilo esclavo : esclavoHilos) {
             try {
                 esclavo.join();
@@ -127,7 +127,7 @@ public class Logica extends UnicastRemoteObject implements IServidorMaestro {
 
             array = new JSONArray();
             for (i = incrementoAnt; i < incrementoNuevo; i++) {
-                System.out.println("incremento: " + incrementoNuevo + " i: " + i + " esclavo: " + k + " numero: " + numeros[i]);
+              //  System.out.println("incremento: " + incrementoNuevo + " i: " + i + " esclavo: " + k + " numero: " + numeros[i]);
 
                 array.put(numeros[i]);
 

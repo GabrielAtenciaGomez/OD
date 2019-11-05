@@ -55,7 +55,9 @@ public class IMPEsclavo  implements IServidorEsclavo {
     public String clasificar(String datos) throws RemoteException {
         JSONArray numeros = new JSONArray(datos);
         
-        
+        for (int i = 0; i < numeros.length();i++) {
+            System.out.println(numeros.get(i));
+        }
         return "";
     }
 
