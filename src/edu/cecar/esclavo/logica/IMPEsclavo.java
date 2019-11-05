@@ -12,6 +12,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 /**
@@ -52,7 +53,7 @@ public class IMPEsclavo  implements IServidorEsclavo {
 
     @Override
     public String clasificar(String datos) throws RemoteException {
-       JSONObject numeros = new JSONObject(datos);
+        JSONArray numeros = new JSONArray(datos);
         
         
         return "";

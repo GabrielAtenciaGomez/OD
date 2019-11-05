@@ -28,6 +28,7 @@ public class Logica extends UnicastRemoteObject implements IServidorMaestro {
 
     ArrayList<IServidorEsclavo> esclavos = new ArrayList();
     ArrayList<JSONObject> datos = new ArrayList();
+    ArrayList<EsclavoHilo>  esclavoHilos = new ArrayList<>();
     int cantidadCores = 0;
     String[] numeros;
     float paqueteNumero = 0.0f;
@@ -73,13 +74,38 @@ public class Logica extends UnicastRemoteObject implements IServidorMaestro {
         cantidadNumero = numeros.length;
         paqueteNumero = cantidadNumero / (float) cantidadCores;
 
-        repartirNumeros();
+      JSONObject numerosRespartidos=  repartirNumeros();
         
-        
+      
         for (IServidorEsclavo esclavo : esclavos) {
-
-            esclavo.ordenar("5");
+            int i=1;         
+            
+            EsclavoHilo esclavoHilo = new EsclavoHilo(esclavo);
+            esclavoHilo.setArray(numerosRespartidos.getJSONArray(""+i));
+            esclavoHilos.add(esclavoHilo);
+            
+            i++;
+            
         }
+           
+        for (EsclavoHilo esclavoHilo : esclavoHilos) {
+            esclavoHilo.start();
+        }
+        for (EsclavoHilo esclavo : esclavoHilos) {
+            try {
+                esclavo.join();
+            } catch (InterruptedException ex) {
+                System.out.println(ex);
+            }
+        }
+             
+            
+            esclavoHilos.clear();
+        System.out.println("fina app");
+        
+      
+        
+      
     }
 
     public JSONObject repartirNumeros() {
