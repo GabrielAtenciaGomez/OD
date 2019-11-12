@@ -12,6 +12,7 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.concurrent.ForkJoinPool;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -53,10 +54,25 @@ public class IMPEsclavo  implements IServidorEsclavo {
 
     @Override
     public String clasificar(String datos) throws RemoteException {
+        ForkJoinPool pool = new ForkJoinPool();
         JSONArray numeros = new JSONArray(datos);
-        
+        int[] array = new int[numeros.length()];
         for (int i = 0; i < numeros.length();i++) {
-            System.out.println(numeros.get(i));
+            array[i]= numeros.getInt(i);
+        }
+        
+          
+        System.out.println("antes"); 
+        
+        pool.submit(new MergeSort(array, 0, array.length)).join();
+        System.out.println("despues");
+        
+        while (pool.isShutdown()==true) {            
+            System.out.println("debtro");
+        }
+        
+        for (int i : array) {
+            System.out.println(i);
         }
         return "";
     }

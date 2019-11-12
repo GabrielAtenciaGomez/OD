@@ -28,7 +28,7 @@ public class Logica extends UnicastRemoteObject implements IServidorMaestro {
 
     ArrayList<IServidorEsclavo> esclavos = new ArrayList();
     ArrayList<JSONObject> datos = new ArrayList();
-    ArrayList<EsclavoHilo>  esclavoHilos = new ArrayList<>();
+    ArrayList<EsclavoHilo> esclavoHilos = new ArrayList<>();
     int cantidadCores = 0;
     String[] numeros;
     float paqueteNumero = 0.0f;
@@ -47,10 +47,17 @@ public class Logica extends UnicastRemoteObject implements IServidorMaestro {
             csvReader = new CSVReader(new FileReader(file), ',');
 
             numeros = csvReader.readNext();
-            // for (String numero : numeros) {
-            //    System.out.println(numero);
-            // }
 
+            Long[] intNumeros = new Long[numeros.length];
+
+
+
+           
+            
+             //for (Long intNumero : intNumeros) {
+                // System.out.println(intNumero);
+            //}
+            
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Logica.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -74,23 +81,22 @@ public class Logica extends UnicastRemoteObject implements IServidorMaestro {
         cantidadNumero = numeros.length;
         paqueteNumero = cantidadNumero / (float) cantidadCores;
 
-      JSONObject numerosRespartidos=  repartirNumeros();
-        
-       int i=1;
+        JSONObject numerosRespartidos = repartirNumeros();
+
+        int i = 1;
         for (IServidorEsclavo esclavo : esclavos) {
-                  
-            
+
             EsclavoHilo esclavoHilo = new EsclavoHilo(esclavo);
-            esclavoHilo.setArray(numerosRespartidos.getJSONArray(""+i));
+            esclavoHilo.setArray(numerosRespartidos.getJSONArray("" + i));
             esclavoHilos.add(esclavoHilo);
-            esclavoHilos.get(i-1).start();
+            esclavoHilos.get(i - 1).start();
             i++;
-            
+
         }
-           
-      //  for (EsclavoHilo esclavoHilo : esclavoHilos) {
-          //  esclavoHilo.start();
-       // }
+
+        //  for (EsclavoHilo esclavoHilo : esclavoHilos) {
+        //  esclavoHilo.start();
+        // }
         for (EsclavoHilo esclavo : esclavoHilos) {
             try {
                 esclavo.join();
@@ -98,14 +104,10 @@ public class Logica extends UnicastRemoteObject implements IServidorMaestro {
                 System.out.println(ex);
             }
         }
-             
-            
-            esclavoHilos.clear();
+
+        esclavoHilos.clear();
         System.out.println("fina app");
-        
-      
-        
-      
+
     }
 
     public JSONObject repartirNumeros() {
@@ -127,14 +129,14 @@ public class Logica extends UnicastRemoteObject implements IServidorMaestro {
 
             array = new JSONArray();
             for (i = incrementoAnt; i < incrementoNuevo; i++) {
-              //  System.out.println("incremento: " + incrementoNuevo + " i: " + i + " esclavo: " + k + " numero: " + numeros[i]);
+                //  System.out.println("incremento: " + incrementoNuevo + " i: " + i + " esclavo: " + k + " numero: " + numeros[i]);
 
                 array.put(numeros[i]);
 
             }
             incrementoAnt = incrementoNuevo;
 
-            respuesta.put(""+(k + 1), array);
+            respuesta.put("" + (k + 1), array);
         }
 
         return respuesta;

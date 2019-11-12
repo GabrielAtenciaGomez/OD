@@ -123,7 +123,8 @@ public class Main extends javax.swing.JFrame {
     }//GEN-LAST:event_inicar
 
     private void buscarArchivo(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buscarArchivo
-       JFileChooser chooser = new JFileChooser();
+       
+        JFileChooser chooser = new JFileChooser();
         chooser.setFileFilter(filter);
         int a =chooser.showOpenDialog(this);
        
