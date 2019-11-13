@@ -15,11 +15,11 @@ import java.util.concurrent.*;
 public class MergeSort extends RecursiveAction {
 
 
-    private final int[] array;
-    private final int low;
-    private final int high;
+    private  long[] array;
+    private  int low;
+    private  int high;
 
-    MergeSort(int[] array, int low, int high) {
+    MergeSort(long [] array, int low, int high) {
 
         this.array = array;
         this.low = low;
@@ -45,7 +45,7 @@ public class MergeSort extends RecursiveAction {
         int copySize = high - low;
         int copyMiddle = middle - low;
         
-        int[] copy = new int[copySize];
+        long[] copy = new long[copySize];
        System.arraycopy(array, low, copy, 0, copy.length);
         int p = 0;
         int q = copyMiddle;

@@ -13,6 +13,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.ForkJoinPool;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -20,72 +22,100 @@ import org.json.JSONObject;
  *
  * @author 1102883765
  */
-public class IMPEsclavo  implements IServidorEsclavo {
-     JSONObject respuesta = new JSONObject();
-    
-     @Override
+public class IMPEsclavo implements IServidorEsclavo {
+
+    IServidorMaestro maestro;
+    JSONObject respuesta = new JSONObject();
+
+    @Override
     public void ordenar(String datos) throws RemoteException {
-               int num = Integer.valueOf(datos);
-        
-        for (int i = 0; i<= num; i++) {
+        int num = Integer.valueOf(datos);
+
+        for (int i = 0; i <= num; i++) {
             System.out.println(i);
         }
     }
 
     public IMPEsclavo() {
-    try{
-        String url = "rmi://127.0.0.1/MyServer";
-        IServidorMaestro maestro = (IServidorMaestro) Naming.lookup(url);
-        maestro.recibirObjeto((IServidorEsclavo)UnicastRemoteObject.exportObject(this, 0));
-        
-    }catch(Exception e){
-        e.printStackTrace();
-    }
-    
-    }
-    
-      public static void main(String[] args) throws NotBoundException, MalformedURLException, RemoteException {
-        
-       new IMPEsclavo();
-        
-     
+
+        conectar();
+
     }
 
+    public static void main(String[] args) {
+        
+        
+        new IMPEsclavo();
+
+    }
 
     @Override
-    public String clasificar(String datos) throws RemoteException {
+    public String clasificar(String datos){
+        JSONArray respuesta = new JSONArray();
+
         ForkJoinPool pool = new ForkJoinPool();
         JSONArray numeros = new JSONArray(datos);
-        int[] array = new int[numeros.length()];
-        for (int i = 0; i < numeros.length();i++) {
-            array[i]= numeros.getInt(i);
+
+        long[] array = new long[numeros.length()];
+
+        for (int i = 0; i < array.length; i++) {
+
+            array[i] = numeros.getLong(i);
+
         }
-        
-          
-        System.out.println("antes"); 
-        
-        pool.submit(new MergeSort(array, 0, array.length)).join();
-        System.out.println("despues");
-        
-        while (pool.isShutdown()==true) {            
-            System.out.println("debtro");
-        }
-        
-        for (int i : array) {
+
+        System.out.println("antes");
+
+        for (long i : array) {
             System.out.println(i);
         }
-        return "";
+        pool.submit(new MergeSort(array, 0, array.length)).join();
+        System.out.println("despues");
+
+        for (long i : array) {
+            System.out.println(i);
+
+            respuesta.put(i);
+        }
+        return respuesta.toString();
     }
 
     @Override
-    public String getInformacion() throws RemoteException {
-      
-       
-       respuesta.put("cores",Runtime.getRuntime().availableProcessors() );
-              
-       return  respuesta.toString();
+    public String getInformacion(){
+
+        respuesta.put("cores", Runtime.getRuntime().availableProcessors());
+
+        return respuesta.toString();
     }
 
+    private void conectar() {
+        while (true) {
 
-    
+            try {
+                
+                
+
+                String url = "rmi://" + IpMaestro.getIP() + "/MyServer";
+                maestro = (IServidorMaestro) Naming.lookup(url);
+                maestro.recibirObjeto((IServidorEsclavo) UnicastRemoteObject.exportObject(this, 0));               
+                System.out.println(maestro.toString());
+                System.out.println("Conectado al maestro");
+                break;
+            } catch (Exception e) {
+
+                System.out.println("intentado conectar.....");
+                
+                
+                
+                try {
+
+                    Thread.sleep(1000);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(IMPEsclavo.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+
+        }
+    }
+
 }

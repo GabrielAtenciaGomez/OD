@@ -104,7 +104,7 @@ public class Logica extends UnicastRemoteObject implements IServidorMaestro {
                 System.out.println(ex);
             }
         }
-
+        
         esclavoHilos.clear();
         System.out.println("fina app");
 
