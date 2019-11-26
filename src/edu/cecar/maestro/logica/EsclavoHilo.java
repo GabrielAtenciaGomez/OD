@@ -18,7 +18,9 @@ import org.json.JSONArray;
 public class EsclavoHilo extends Thread{
 
     IServidorEsclavo esclavo;
-    JSONArray array;
+     JSONArray array;
+    
+    private JSONArray numeros;
     
 
     public EsclavoHilo(IServidorEsclavo esclavo) {
@@ -34,7 +36,7 @@ public class EsclavoHilo extends Thread{
     public void run() {
        
         try {
-            esclavo.clasificar(array.toString());
+        numeros = new JSONArray(    esclavo.clasificar(array.toString()));
         } catch (RemoteException ex) {
             Logger.getLogger(EsclavoHilo.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -48,6 +50,14 @@ public class EsclavoHilo extends Thread{
 
     public void setArray(JSONArray array) {
         this.array = array;
+    }
+
+    public JSONArray getNumeros() {
+        return numeros;
+    }
+
+    public void setNumeros(JSONArray numeros) {
+        this.numeros = numeros;
     }
     
     

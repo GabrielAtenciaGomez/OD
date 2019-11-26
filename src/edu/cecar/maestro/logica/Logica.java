@@ -15,6 +15,8 @@ import java.io.IOException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.JSONArray;
@@ -29,6 +31,10 @@ public class Logica extends UnicastRemoteObject implements IServidorMaestro {
     ArrayList<IServidorEsclavo> esclavos = new ArrayList();
     ArrayList<JSONObject> datos = new ArrayList();
     ArrayList<EsclavoHilo> esclavoHilos = new ArrayList<>();
+    ArrayList<ColaNumero> colaNumeros = new ArrayList<>();
+
+    ArrayList<Stack<Long>> paquetesNumero = new ArrayList<>();
+
     int cantidadCores = 0;
     String[] numeros;
     float paqueteNumero = 0.0f;
@@ -50,14 +56,9 @@ public class Logica extends UnicastRemoteObject implements IServidorMaestro {
 
             Long[] intNumeros = new Long[numeros.length];
 
-
-
-           
-            
-             //for (Long intNumero : intNumeros) {
-                // System.out.println(intNumero);
+            //for (Long intNumero : intNumeros) {
+            // System.out.println(intNumero);
             //}
-            
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Logica.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -104,7 +105,22 @@ public class Logica extends UnicastRemoteObject implements IServidorMaestro {
                 System.out.println(ex);
             }
         }
-        
+
+        for (EsclavoHilo esclavo : esclavoHilos) {
+
+            //colaNumeros.add(new ColaNumero(esclavo.getNumeros()));
+            int aux = esclavo.getNumeros().length();
+            Stack<Long> auxL = new Stack<>();
+            for (int j = 0; j < aux; j++) {
+                auxL.add(esclavo.getNumeros().getLong(j));
+            }
+            paquetesNumero.add(auxL);
+        }
+
+        System.out.println("tamaño páquete numeros: " + paquetesNumero.size());
+        ordenarDatosRecividos();
+
+        colaNumeros.clear();
         esclavoHilos.clear();
         System.out.println("fina app");
 
@@ -142,4 +158,30 @@ public class Logica extends UnicastRemoteObject implements IServidorMaestro {
         return respuesta;
     }
 
+    public void ordenarDatosRecividos() {
+        long aux = 0;
+        int pivote = 0;
+        int parada = 0;
+        do {
+            parada = 0;
+            for (int i = 0; i < paquetesNumero.size(); i++) {
+
+                if (!paquetesNumero.get(i).isEmpty()) {
+                    if (paquetesNumero.get(i).peek() > aux) {
+                        aux = paquetesNumero.get(i).peek();
+                        pivote = i;
+                    } else if (i == paquetesNumero.size() - 1) {
+                        System.out.println(aux + " " + paquetesNumero.get(pivote).pop());
+                        aux = 0;
+
+                    }
+
+                } else {
+                    parada++;
+                }
+            }
+
+        } while (paquetesNumero.size()  > parada);
+
+    }
 }

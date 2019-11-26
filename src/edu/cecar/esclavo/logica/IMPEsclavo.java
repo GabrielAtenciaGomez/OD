@@ -7,9 +7,7 @@ package edu.cecar.esclavo.logica;
 
 import edu.cecar.interfaces.IServidorEsclavo;
 import edu.cecar.interfaces.IServidorMaestro;
-import java.net.MalformedURLException;
 import java.rmi.Naming;
-import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.concurrent.ForkJoinPool;
@@ -42,11 +40,13 @@ public class IMPEsclavo implements IServidorEsclavo {
 
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         
         
-        new IMPEsclavo();
+     IMPEsclavo esclavo=   new IMPEsclavo();
 
+     
+        
     }
 
     @Override
@@ -116,6 +116,14 @@ public class IMPEsclavo implements IServidorEsclavo {
             }
 
         }
+    }
+
+    public IServidorMaestro getMaestro() {
+        return maestro;
+    }
+
+    public void setMaestro(IServidorMaestro maestro) {
+        this.maestro = maestro;
     }
 
 }
