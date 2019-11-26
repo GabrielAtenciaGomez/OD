@@ -167,20 +167,24 @@ public class Logica extends UnicastRemoteObject implements IServidorMaestro {
             for (int i = 0; i < paquetesNumero.size(); i++) {
 
                 if (!paquetesNumero.get(i).isEmpty()) {
-                    if (paquetesNumero.get(i).peek() > aux) {
+                    if (paquetesNumero.get(i).peek() >= aux) {
                         aux = paquetesNumero.get(i).peek();
                         pivote = i;
-                    } else if (i == paquetesNumero.size() - 1) {
+                       
+                    } 
+                    if (i == paquetesNumero.size() - 1) {
                         System.out.println(aux + " " + paquetesNumero.get(pivote).pop());
+                     //  paquetesNumero.get(pivote).pop();
                         aux = 0;
-
+                    pivote=0;
                     }
 
                 } else {
-                    parada++;
+                    paquetesNumero.remove(i);
                 }
             }
-
+           
+          // System.out.println(paquetesNumero.size());
         } while (paquetesNumero.size()  > parada);
 
     }
